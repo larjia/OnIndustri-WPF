@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="OnIndustri.MasterData.Views.Dialogs.SupplierContactCreateUpdate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:local="clr-namespace:OnIndustri.MasterData.Views.Dialogs"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Width="600" Height="230">
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding NotificationRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+
+    <UserControl.Resources>
+        <Style x:Key="textBoxStyle">
+            <Setter Property="TextBox.VerticalContentAlignment" Value="Center"/>
+            <Setter Property="TextBox.Margin" Value="5,0,0,0"/>
+            <Setter Property="TextBox.Height" Value="23"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="1" Grid.Column="0" FontWeight="Bold" Text="姓名:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.Name}"/>
+        <TextBlock Grid.Row="1" Grid.Column="3" FontWeight="Bold" Text="职务:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="1" Grid.Column="4" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.Position}"/>
+        
+        <TextBlock Grid.Row="2" Grid.Column="0" FontWeight="Bold" Text="电话:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.Phone}"/>
+        <TextBlock Grid.Row="2" Grid.Column="3" FontWeight="Bold" Text="手机:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="4" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.MobilePhone}"/>
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" FontWeight="Bold" Text="QQ:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.QQ}"/>
+        <TextBlock Grid.Row="3" Grid.Column="3" FontWeight="Bold" Text="微信:"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="3" Grid.Column="4" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.WeChat}"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" FontWeight="Bold" Text="邮箱"
+                   VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textBoxStyle}"
+                 Text="{Binding Notification.NewContact.Email}"/>
+        
+        <Button Grid.Row="6" Grid.Column="4" Content="确认" Width="60" Height="23" HorizontalAlignment="Left" Background="Transparent"
+                x:Name="BtnSave" Margin="50,0,0,0"
+                Command="{Binding ConfirmCommand}"/>
+        <Button Grid.Row="6" Grid.Column="4" Content="取消" Width="60" Height="23" HorizontalAlignment="Right" Background="Transparent"
+                x:Name="BtnCancel" Margin="20,0,0,0"
+                Command="{Binding CancelCommand}"/>
+    </Grid>
+</UserControl>
