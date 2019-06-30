@@ -140,6 +140,10 @@
     <Compile Include="Migrations\20190629012354_UpdateSupplierContactMobilePhone.designer.cs">
       <DependentUpon>20190629012354_UpdateSupplierContactMobilePhone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190630055140_ChangePartnerDisabledField.cs" />
+    <Compile Include="Migrations\20190630055140_ChangePartnerDisabledField.designer.cs">
+      <DependentUpon>20190630055140_ChangePartnerDisabledField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\PartnerContextModelSnapshot.cs" />
     <Compile Include="Model\MasterData\Address.cs" />
     <Compile Include="Model\MasterData\Contact.cs" />

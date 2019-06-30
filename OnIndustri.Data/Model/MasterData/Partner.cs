@@ -149,11 +149,11 @@ namespace OnIndustri.Data.Model.MasterData
         }
 
         // 停用
-        private bool _disabled;
-        public bool Disable
+        private bool _isDisabled;
+        public bool IsDisabled
         {
-            get { return _disabled; }
-            set { SetProperty(ref _disabled, value); }
+            get { return _isDisabled; }
+            set { SetProperty(ref _isDisabled, value); }
         }
 
         // 联系人
