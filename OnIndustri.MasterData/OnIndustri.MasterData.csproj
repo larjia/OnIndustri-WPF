@@ -78,6 +78,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="Prism, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.1.0.431\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -153,10 +154,14 @@
     </Compile>
     <Compile Include="Views\Dialogs\SupplierContactCreateUpdateNotif.cs" />
     <Compile Include="Views\Dialogs\SupplierContactCreateUpdateViewModel.cs" />
+    <Compile Include="Views\SupplierRetrieve.xaml.cs">
+      <DependentUpon>SupplierRetrieve.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SupplierCreate.xaml.cs">
       <DependentUpon>SupplierCreate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SupplierCreateViewModel.cs" />
+    <Compile Include="Views\SupplierRetrieveViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OnIndustri.Data\OnIndustri.Data.csproj">
@@ -176,6 +181,10 @@
     <Page Include="Views\Dialogs\SupplierContactCreateUpdate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SupplierRetrieve.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SupplierCreate.xaml">
       <SubType>Designer</SubType>
