@@ -239,7 +239,60 @@ namespace OnIndustri.MasterData.Views
 
         private void Delete()
         {
+            var supplier = SuppliersView.CurrentItem as Supplier;
+            ConfirmationRequest.Raise(
+                new Confirmation
+                {
+                    Content = "删除供应商" + supplier.Name + "?",
+                    Title = "确认",
+                },
+                r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        using (var context = new MasterDataContext())
+                        {
+                            var existingSupplier = context.Suppliers.Where(s => s.Id == supplier.Id)
+                                                        .Include(s => s.Contacts).FirstOrDefault();
+                            if (existingSupplier == null)
+                            {
+                                NotificationRequest.Raise(
+                                    new Notification
+                                    {
+                                        Content = "供应商" + supplier.Name + "不存在。\n可能已删除，请重新查询。",
+                                        Title = "提示"
+                                    }
+                                );
+                                return;
+                            }
+                            context.Remove(existingSupplier);
+                            context.SaveChanges();
+                        }
+                        
+                        NotificationRequest.Raise(
+                            new Notification
+                            {
+                                Content = "已删除。",
+                                Title = "提示"
+                            }
+                        );
+                        Suppliers.Remove(supplier);
+                        SuppliersView.Refresh();
+                        TotalRecords -= 1;
+                        TotalPages = (int)Math.Ceiling(1.0 * TotalRecords / PageSize);
 
+                        if (TotalPages == 0)
+                        {
+                            PageIndex = 0;
+                        }
+                        else if (PageIndex > TotalPages)
+                        {
+                            PageIndex = TotalPages;
+                            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+                        }
+                    }
+                }
+            );
         }
 
         private bool CanDelete()
