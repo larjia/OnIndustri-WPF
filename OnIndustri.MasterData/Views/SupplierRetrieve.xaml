@@ -3,38 +3,24 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:OnIndustri.MasterData.Views"
              xmlns:views="clr-namespace:OnIndustri.MasterData.Views.Dialogs"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:wpfTool="http://schemas.xceed.com/wpf/xaml/toolkit"
-             prism:ViewModelLocator.AutoWireViewModel="True" Width="960">
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             mc:Ignorable="d"
+             d:DesignWidth="960">
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding NotificationRequest}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
         </prism:InteractionRequestTrigger>
         <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
-        </prism:InteractionRequestTrigger>
-
-        <prism:InteractionRequestTrigger SourceObject="{Binding SupplierContactCreateRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
-                <prism:PopupWindowAction.WindowContent>
-                    <views:SupplierContactCreateUpdate/>
-                </prism:PopupWindowAction.WindowContent>
-            </prism:PopupWindowAction>
-        </prism:InteractionRequestTrigger>
-
-        <prism:InteractionRequestTrigger SourceObject="{Binding SupplierContactUpdateRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
-                <prism:PopupWindowAction.WindowContent>
-                    <views:SupplierContactCreateUpdate/>
-                </prism:PopupWindowAction.WindowContent>
-            </prism:PopupWindowAction>
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
-    
+
     <UserControl.Resources>
         <Style x:Key="readonlyStyle" TargetType="TextBox">
             <Style.Triggers>
@@ -43,7 +29,7 @@
                 </Trigger>
             </Style.Triggers>   
         </Style>
-        
+
         <Style x:Key="contactTextBoxStyle">
             <Setter Property="TextBox.Margin" Value="0,0,5,5"/>
             <Setter Property="TextBox.VerticalContentAlignment" Value="Center"/>
@@ -92,7 +78,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <prism:InvokeCommandAction 
-                                        Command="{Binding ElementName=root, Path=DataContext.SupplierContactUpdateCommand}"/>
+                                        Command="{Binding ElementName=layoutRoot, Path=DataContext.SupplierContactUpdateCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Button>
@@ -103,7 +89,7 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <prism:InvokeCommandAction
-                                        Command="{Binding ElementName=root, Path=DataContext.SupplierContactDeleteCommand}"/>
+                                        Command="{Binding ElementName=layoutRoot, Path=DataContext.SupplierContactDeleteCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Button>
@@ -113,7 +99,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Background="LightBlue" x:Name="root">
+    <Grid Background="LightBlue" x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -121,10 +107,12 @@
         </Grid.RowDefinitions>
         <StackPanel Background="Azure" Orientation="Horizontal">
             <TextBlock Margin="5,0,0,0" Text="供应商代码:" VerticalAlignment="Center"/>
-            <TextBox Margin="5,0,0,0" Height="20" Width="120" HorizontalContentAlignment="Left"/>
+            <TextBox Margin="5,0,0,0" Height="20" Width="120" HorizontalContentAlignment="Left"
+                     Text="{Binding SearchNumber}"/>
             <TextBlock Margin="5,0,0,0" Text="供应商名称:" VerticalAlignment="Center"/>
-            <TextBox Margin="5,0,0,0" Height="20" Width="240" HorizontalContentAlignment="Left"/>
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+            <TextBox Margin="5,0,0,0" Height="20" Width="240" HorizontalContentAlignment="Left"
+                     Text="{Binding SearchName}"/>
+            <Button BorderThickness="0" Command="{Binding SearchCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="Search" Height="12"/>
@@ -132,11 +120,30 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="80" Margin="5,0,0,0">
+
+            <Button BorderThickness="0" Height="20" Width="60" Margin="100,0,0,0" Command="{Binding DetailCommand}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <fa:ImageAwesome Icon="Search" Height="12"/>
-                        <TextBlock Text="高级查询" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                        <fa:ImageAwesome Icon="Info" Height="12"/>
+                        <TextBlock Text="详细" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <Button BorderThickness="0" Height="20" Width="60" Margin="5,0,0,0" Command="{Binding UpdateCommand}">
+            <!--Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=suppliers, Path=SelectedItems}">-->
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Edit" Height="12"/>
+                        <TextBlock Text="编辑" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button BorderThickness="0" Command="{Binding DeleteCommand}" Height="20" Width="60" Margin="5,0,0,0">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="TrashOutline" Height="12"/>
+                        <TextBlock Text="删除" VerticalAlignment="Center" Margin="3,0,0,0"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -192,10 +199,31 @@
             <TextBlock Text="项。" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <Grid Grid.Row="2" Height="300">
+        <Grid Grid.Row="2">
             <ScrollViewer>
-                <DataGrid x:Name="suppliers" Margin="3">
-                    
+                <DataGrid x:Name="suppliers" Margin="3" Background="White" ItemsSource="{Binding SuppliersView}"
+                          CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" SelectionMode="Single"
+                          IsSynchronizedWithCurrentItem="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden" />
+                        <DataGridTextColumn Header="供应商编码" Binding="{Binding Number}" />
+                        <DataGridTextColumn Header="供应商名称" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="地址" Binding="{Binding Address}" />
+                        <DataGridTextColumn Header="地址2" Binding="{Binding Address2}" />
+                        <DataGridTextColumn Header="国家" Binding="{Binding Country}" />
+                        <DataGridTextColumn Header="省份" Binding="{Binding State}" />
+                        <DataGridTextColumn Header="城市" Binding="{Binding City}" />
+                        <DataGridTextColumn Header="类型" Binding="{Binding PartnerType}" />
+                        <DataGridTextColumn Header="货币" Binding="{Binding Currency}" />
+                        <DataGridTextColumn Header="税率(%)" Binding="{Binding TaxRate}" />
+                        <DataGridTextColumn Header="应付账户" Binding="{Binding Account}" />
+                        <DataGridTextColumn Header="支付方式" Binding="{Binding CreditTerm}" />
+                        <DataGridTextColumn Header="纳税人识别号" Binding="{Binding TIN}" />
+                        <DataGridTextColumn Header="地址电话" Binding="{Binding AddressAndPhone}" />
+                        <DataGridTextColumn Header="开户行及账户" Binding="{Binding BankAccount}" />
+                        <DataGridCheckBoxColumn Header="停用" Binding="{Binding IsDisabled}" />
+                        <DataGridTextColumn Header="备注" Binding="{Binding Remark}" />
+                    </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
         </Grid>

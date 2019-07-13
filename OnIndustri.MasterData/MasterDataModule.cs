@@ -17,8 +17,9 @@ namespace OnIndustri.MasterData
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<SupplierCreate>();
+            containerRegistry.RegisterForNavigation<SupplierCreateUpdate>();
             containerRegistry.RegisterForNavigation<SupplierRetrieve>();
+            containerRegistry.RegisterForNavigation<SupplierDetail>();
         }
     }
 }

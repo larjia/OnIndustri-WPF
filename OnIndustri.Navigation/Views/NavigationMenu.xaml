@@ -15,8 +15,8 @@
             </i:Interaction.Triggers>
 
             <TreeViewItem Header="基础数据">
-                <TreeViewItem Header="供应商-新增" Tag="SupplierCreate"/>
-                <TreeViewItem Header="供应商-维护"/>
+                <TreeViewItem Header="供应商-新增" Tag="SupplierCreateUpdate"/>
+                <TreeViewItem Header="供应商-维护" Tag="SupplierRetrieve"/>
             </TreeViewItem>
         </TreeView>
     </Grid>

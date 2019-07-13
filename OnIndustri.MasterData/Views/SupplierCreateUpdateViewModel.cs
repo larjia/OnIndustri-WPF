@@ -15,20 +15,20 @@ using System.Windows.Controls;
 
 namespace OnIndustri.MasterData.Views
 {
-    public class SupplierCreateViewModel : ViewModelBase, INavigationAware
+    public class SupplierCreateUpdateViewModel : ViewModelBase, INavigationAware
     {
-        private string _title = "新增供应商";
+        private string _title = "供应商新增";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
 
-        private Supplier _newSupplier;
-        public Supplier NewSupplier
+        private Supplier _currentSupplier;
+        public Supplier CurrentSupplier
         {
-            get { return _newSupplier; }
-            set { SetProperty(ref _newSupplier, value); }
+            get { return _currentSupplier; }
+            set { SetProperty(ref _currentSupplier, value); }
         }
 
         private bool _isEdit;
@@ -44,6 +44,8 @@ namespace OnIndustri.MasterData.Views
 
         // Commands
         public DelegateCommand SaveCommand { get; private set; }
+        public DelegateCommand DeleteCommand { get; private set; }
+
         // Commands - Contact Create
         public InteractionRequest<ISupplierContactCreateUpdateNotif> SupplierContactCreateRequest { get; set; }
         public DelegateCommand SupplierContactCreateCommand { get; private set; }
@@ -55,15 +57,10 @@ namespace OnIndustri.MasterData.Views
         // Commands - Contact Delete
         public DelegateCommand<object> SupplierContactDeleteCommand { get; private set; }
 
-        public SupplierCreateViewModel()
+        public SupplierCreateUpdateViewModel()
         {
-            NewSupplier = new Supplier
-            {
-                InternalType = "Supplier",
-                Contacts = new ObservableCollection<Contact>(),
-            };
-
             SaveCommand = new DelegateCommand(Save);
+            DeleteCommand = new DelegateCommand(Delete).ObservesCanExecute(() => IsEdit);
 
             // Notifications
             NotificationRequest = new InteractionRequest<INotification>();
@@ -87,7 +84,7 @@ namespace OnIndustri.MasterData.Views
             {
                 if (r.Confirmed && r.NewContact != null)
                 {
-                    NewSupplier.Contacts.Add(r.NewContact);
+                    CurrentSupplier.Contacts.Add(r.NewContact);
                 }
             });
         }
@@ -120,13 +117,13 @@ namespace OnIndustri.MasterData.Views
             var contact = listboxItem.DataContext as Contact;
             ConfirmationRequest.Raise(new Confirmation
             {
-                Title = "确认提示",
-                Content = "删除联系人?" + "\n\n" + contact.Name,
+                Title = "确认",
+                Content = "删除联系人" + contact.Name + "?",
             }, r =>
             {
                 if (r.Confirmed)
                 {
-                    NewSupplier.Contacts.Remove(contact);
+                    CurrentSupplier.Contacts.Remove(contact);
                 }
             });
         }
@@ -139,18 +136,16 @@ namespace OnIndustri.MasterData.Views
 
                 var existingSupplier = context.Suppliers
                     .Include(s => s.Contacts)
-                    .FirstOrDefault(s => s.Id == NewSupplier.Id);
+                    .FirstOrDefault(s => s.Id == CurrentSupplier.Id);
 
                 if (existingSupplier == null)
                 {
-                    context.Update(NewSupplier);
-                    context.SaveChanges();
-                    IsEdit = true;
+                    context.Add(CurrentSupplier);
                 }
                 else
                 {
-                    context.Entry(existingSupplier).CurrentValues.SetValues(NewSupplier);
-                    foreach (var contact in NewSupplier.Contacts)
+                    context.Entry(existingSupplier).CurrentValues.SetValues(CurrentSupplier);
+                    foreach (var contact in CurrentSupplier.Contacts)
                     {
                         var existingContact = existingSupplier.Contacts
                             .FirstOrDefault(c => c.Id == contact.Id);
@@ -167,7 +162,7 @@ namespace OnIndustri.MasterData.Views
 
                     foreach (var contact in existingSupplier.Contacts)
                     {
-                        if (!NewSupplier.Contacts.Any(c => c.Id == contact.Id))
+                        if (!CurrentSupplier.Contacts.Any(c => c.Id == contact.Id))
                         {
                             context.Remove(contact);
                         }
@@ -176,21 +171,51 @@ namespace OnIndustri.MasterData.Views
 
                 context.SaveChanges();
                 NotificationRequest.Raise(new Notification { Content = "保存成功", Title = "提示" });
+                IsEdit = true;
             }
+        }
+
+        private void Delete()
+        {
+            ConfirmationRequest.Raise(new Confirmation
+            {
+                Content = "删除供应商" + CurrentSupplier.Number + "?",
+                Title = "确认"
+            },
+            r =>
+            {
+                if (r.Confirmed)
+                {
+                    using (var context = new PartnerContext())
+                    {
+                        context.Suppliers.Remove(CurrentSupplier);
+                        context.SaveChanges();
+                    }
+
+                    IsEdit = false;
+                    NotificationRequest.Raise(new Notification { Content = "已删除", Title = "提示" });
+                    CurrentSupplier = new Supplier
+                    {
+                        InternalType = "Supplier",
+                        Contacts = new ObservableCollection<Contact>(),
+                    };
+                    Title = "供应商新增";
+                }
+            });
         }
 
         // Validation
         private bool Validate(PartnerContext context)
         {
-            if (string.IsNullOrWhiteSpace(NewSupplier.Number))
+            if (string.IsNullOrWhiteSpace(CurrentSupplier.Number))
             {
-                NotificationRequest.Raise(new Notification { Content = "供应商编码为空", Title = "错误提示" });
+                NotificationRequest.Raise(new Notification { Content = "供应商编码为空", Title = "提示" });
                 return false;
             }
             
-            if (!IsEdit && context.Partners.Where(s => s.Number == NewSupplier.Number).FirstOrDefault() != null)
+            if (!IsEdit && context.Partners.Where(s => s.Number == CurrentSupplier.Number).FirstOrDefault() != null)
             {
-                NotificationRequest.Raise(new Notification { Content = "供应商编码已存在", Title = "错误提示" });
+                NotificationRequest.Raise(new Notification { Content = "供应商编码已存在", Title = "提示" });
                 return false;
             }
 
@@ -209,6 +234,21 @@ namespace OnIndustri.MasterData.Views
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            var supplier = navigationContext.Parameters["supplier"] as Supplier;
+            if (supplier != null)
+            {
+                CurrentSupplier = supplier;
+                Title = "供应商维护";
+                IsEdit = true;
+            }
+            else
+            {
+                CurrentSupplier = new Supplier
+                {
+                    InternalType = "Supplier",
+                    Contacts = new ObservableCollection<Contact>()
+                };
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace OnIndustri.MasterData.Views
 {
     /// <summary>
-    /// SupplierCreate.xaml 的交互逻辑
+    /// SupplierCreateUpdate.xaml 的交互逻辑
     /// </summary>
-    public partial class SupplierCreate : UserControl
+    public partial class SupplierCreateUpdate : UserControl
     {
-        public SupplierCreate()
+        public SupplierCreateUpdate()
         {
             InitializeComponent();
         }

@@ -154,13 +154,17 @@
     </Compile>
     <Compile Include="Views\Dialogs\SupplierContactCreateUpdateNotif.cs" />
     <Compile Include="Views\Dialogs\SupplierContactCreateUpdateViewModel.cs" />
+    <Compile Include="Views\SupplierDetailViewModel.cs" />
+    <Compile Include="Views\SupplierDetail.xaml.cs">
+      <DependentUpon>SupplierDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SupplierRetrieve.xaml.cs">
       <DependentUpon>SupplierRetrieve.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SupplierCreate.xaml.cs">
-      <DependentUpon>SupplierCreate.xaml</DependentUpon>
+    <Compile Include="Views\SupplierCreateUpdate.xaml.cs">
+      <DependentUpon>SupplierCreateUpdate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SupplierCreateViewModel.cs" />
+    <Compile Include="Views\SupplierCreateUpdateViewModel.cs" />
     <Compile Include="Views\SupplierRetrieveViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -182,11 +186,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SupplierDetail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\SupplierRetrieve.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SupplierCreate.xaml">
+    <Page Include="Views\SupplierCreateUpdate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

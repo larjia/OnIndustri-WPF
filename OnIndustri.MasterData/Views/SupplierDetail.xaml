@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OnIndustri.MasterData.Views.SupplierCreate"
+﻿<UserControl x:Class="OnIndustri.MasterData.Views.SupplierDetail"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,40 +10,22 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:wpfTool="http://schemas.xceed.com/wpf/xaml/toolkit"
              prism:ViewModelLocator.AutoWireViewModel="True">
+
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding NotificationRequest}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
         </prism:InteractionRequestTrigger>
-        <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
-        </prism:InteractionRequestTrigger>
-
-        <prism:InteractionRequestTrigger SourceObject="{Binding SupplierContactCreateRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
-                <prism:PopupWindowAction.WindowContent>
-                    <views:SupplierContactCreateUpdate/>
-                </prism:PopupWindowAction.WindowContent>
-            </prism:PopupWindowAction>
-        </prism:InteractionRequestTrigger>
-
-        <prism:InteractionRequestTrigger SourceObject="{Binding SupplierContactUpdateRequest}">
-            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
-                <prism:PopupWindowAction.WindowContent>
-                    <views:SupplierContactCreateUpdate/>
-                </prism:PopupWindowAction.WindowContent>
-            </prism:PopupWindowAction>
-        </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
-    
+
     <UserControl.Resources>
         <Style x:Key="readonlyStyle" TargetType="TextBox">
             <Style.Triggers>
                 <Trigger Property="IsReadOnly" Value="true">
                     <Setter Property="Background" Value="Beige"/>
                 </Trigger>
-            </Style.Triggers>   
+            </Style.Triggers>
         </Style>
-        
+
         <Style x:Key="contactTextBoxStyle">
             <Setter Property="TextBox.Margin" Value="0,0,5,5"/>
             <Setter Property="TextBox.VerticalContentAlignment" Value="Center"/>
@@ -52,7 +34,7 @@
         </Style>
 
         <DataTemplate x:Key="contactTemplate">
-            <Border Name="border" BorderBrush="OrangeRed" BorderThickness="1" Padding="5">
+            <Border Name="border" BorderBrush="CornflowerBlue" BorderThickness="1" Padding="5">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="26"/>
@@ -68,62 +50,39 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="姓名:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name}" Style="{StaticResource contactTextBoxStyle}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Name, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
                     <TextBlock Grid.Row="0" Grid.Column="2" Text="职务:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Position}" Style="{StaticResource contactTextBoxStyle}"/>
-                    
+                    <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Position, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
+
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="电话:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Phone}" Style="{StaticResource contactTextBoxStyle}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Phone, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="手机:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding MobilePhone}" Style="{StaticResource contactTextBoxStyle}"/>
-                    
+                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding MobilePhone, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
+
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="QQ:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding QQ}" Style="{StaticResource contactTextBoxStyle}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding QQ, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
                     <TextBlock Grid.Row="2" Grid.Column="2" Text="微信:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding WeChat}" Style="{StaticResource contactTextBoxStyle}"/>
-                    
+                    <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding WeChat, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
+
                     <TextBlock Grid.Row="3" Grid.Column="0" Text="邮箱:" FontWeight="Bold" Margin="0,2,0,0"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email}" Style="{StaticResource contactTextBoxStyle}"/>
-                    <StackPanel Grid.Row="4" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Width="55" Height="20">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Edit" Height="12"/>
-                            </Button.Content>
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <prism:InvokeCommandAction 
-                                        Command="{Binding ElementName=root, Path=DataContext.SupplierContactUpdateCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                        <Button Width="55" Height="20" Margin="10,0,0,0" Command="{Binding DeleteContactCommand}">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="TrashOutline" Height="12"/>
-                            </Button.Content>
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <prism:InvokeCommandAction
-                                        Command="{Binding ElementName=root, Path=DataContext.SupplierContactDeleteCommand}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Button>
-                    </StackPanel>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email, Mode=OneWay}" Style="{StaticResource contactTextBoxStyle}"/>
                 </Grid>
             </Border>
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Background="LightBlue" x:Name="root">
+    <Grid Background="LightBlue" x:Name="layoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Background="Azure" Orientation="Horizontal">
-            <Button x:Name="BtnSave" BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+
+        <StackPanel Grid.Row="0" Background="Azure" Orientation="Horizontal">
+            <Button BorderThickness="0" Command="{Binding RefreshCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <fa:ImageAwesome Icon="Save" Height="12"/>
-                        <TextBlock Text="保存" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                        <fa:ImageAwesome Icon="Refresh" Height="12"/>
+                        <TextBlock Text="刷新" VerticalAlignment="Center" Margin="3,0,0,0"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -143,7 +102,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="300"/>
+                <!--<RowDefinition Height="300"/>-->
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -163,37 +122,47 @@
 
             <TextBlock Grid.Row="2" Grid.Column="0" Text="供应商编码:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="2" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Style="{StaticResource readonlyStyle}" IsReadOnly="{Binding IsEdit}"
-                     Text="{Binding NewSupplier.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.Number, Mode=OneWay}"/>
             <TextBlock Grid.Row="2" Grid.Column="2" Text="供应商名称:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Width="300" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                       Text="{Binding NewSupplier.Name}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.Name, Mode=OneWay}"/>
             <TextBlock Grid.Row="2" Grid.Column="6" Text="停       用:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <CheckBox Grid.Row="2" Grid.Column="7" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding NewSupplier.IsDisabled}"/>
+            <CheckBox Grid.Row="2" Grid.Column="7" VerticalAlignment="Center" Margin="5,0,0,0"
+                      IsHitTestVisible="False"
+                      IsChecked="{Binding CurrentSupplier.IsDisabled}" />
 
             <TextBlock Grid.Row="3" Grid.Column="0" Text="地          址:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Width="390" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.Address}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding Address, Mode=OneWay}"/>
 
             <TextBlock Grid.Row="3" Grid.Column="4" Text="地          址:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="5" Grid.ColumnSpan="4" Width="390" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.Address2, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding Address2, Mode=OneWay}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0" Text="国          家:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="4" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.Country, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.Country, Mode=OneWay}"/>
             <TextBlock Grid.Row="4" Grid.Column="2" Text="省          份:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="4" Grid.Column="3" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.State, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.State, Mode=OneWay}"/>
             <TextBlock Grid.Row="4" Grid.Column="4" Text="城          市:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="4" Grid.Column="5" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.City, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.City, Mode=OneWay}"/>
             <TextBlock Grid.Row="4" Grid.Column="6" Text="类          型:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="4" Grid.Column="7" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.PartnerType, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.PartnerType, Mode=OneWay}"/>
             <TextBlock Grid.Row="5" Grid.Column="0" Text="备          注:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Width="450" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.Remark, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.Remark, Mode=OneWay}"/>
 
             <Grid Grid.Row="7" Grid.ColumnSpan="9" Background="Linen">
                 <TextBlock Text="财务" VerticalAlignment="Center" Margin="10,0,0,0"/>
@@ -201,52 +170,47 @@
 
             <TextBlock Grid.Row="9" Grid.Column="0" Text="货          币:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <ComboBox Grid.Row="9" Grid.Column="1" Height="20" Width="150" HorizontalAlignment="Left" Margin="5,0,0,0"
-                      SelectedValuePath="Content" SelectedValue="{Binding NewSupplier.Currency}">
-                <!--<ComboBox.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="Red"/>
-                </ComboBox.Resources>-->
+                      IsHitTestVisible="False"
+                      SelectedValuePath="Content" SelectedValue="{Binding CurrentSupplier.Currency}">
                 <ComboBoxItem Content="CNY"/>
                 <ComboBoxItem Content="USD"/>
                 <ComboBoxItem Content="EUR"/>
             </ComboBox>
             <TextBlock Grid.Row="9" Grid.Column="2" Text="税     率(%):" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <wpfTool:DecimalUpDown Grid.Row="9" Grid.Column="3" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                                   ShowButtonSpinner="False"
+            <TextBox Grid.Row="9" Grid.Column="3" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
                                    TextAlignment="Left"
-                                   Text="{Binding NewSupplier.TaxRate, UpdateSourceTrigger=PropertyChanged}"/>
+                                   Background="Beige" IsReadOnly="True"
+                                   Text="{Binding CurrentSupplier.TaxRate, Mode=OneWay}"/>
             <TextBlock Grid.Row="9" Grid.Column="4" Text="账          户:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="9" Grid.Column="5" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.Account, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.Account, Mode=OneWay}"/>
             <TextBlock Grid.Row="9" Grid.Column="6" Text="支 付 方 式:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="9" Grid.Column="7" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.CreditTerm, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.CreditTerm, Mode=OneWay}"/>
 
             <TextBlock Grid.Row="10" Grid.Column="0" Text="纳税人识别号:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="10" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.TIN, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.TIN, Mode=OneWay}"/>
             <TextBlock Grid.Row="10" Grid.Column="2" Text="地 址 电 话:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="10" Grid.Column="3" Grid.ColumnSpan="3" Width="240" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.AddressAndPhone, UpdateSourceTrigger=PropertyChanged}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.AddressAndPhone, Mode=OneWay}"/>
             <TextBlock Grid.Row="10" Grid.Column="5" Text="开户行及账户:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="10" Grid.Column="6" Grid.ColumnSpan="2" Width="230" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
-                     Text="{Binding NewSupplier.BankAccount}"/>
+                     Background="Beige" IsReadOnly="True"
+                     Text="{Binding CurrentSupplier.BankAccount, Mode=OneWay}"/>
 
             <TabControl Grid.Row="12" Grid.ColumnSpan="9" Margin="5">
                 <TabItem Header="联系人">
                     <ScrollViewer>
                         <StackPanel>
-                            <Button HorizontalAlignment="Left" Command="{Binding SupplierContactCreateCommand}" Height="20" Margin="5,5,0,0">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:ImageAwesome Icon="Plus" VerticalAlignment="Center" Height="12"/>
-                                        <TextBlock Text="添加联系人" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <ListBox x:Name="contactList" Width="550" BorderThickness="0"
+                            <ListBox Width="550" BorderThickness="0"
                                      HorizontalAlignment="Left"
                                      HorizontalContentAlignment="Stretch"
-                                     ItemsSource="{Binding NewSupplier.Contacts}"
+                                     ItemsSource="{Binding CurrentSupplier.Contacts}"
                                      ItemTemplate="{StaticResource contactTemplate}"/>
                         </StackPanel>
                     </ScrollViewer>
