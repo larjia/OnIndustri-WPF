@@ -131,7 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\ApplicationContext.cs" />
-    <Compile Include="Database\PartnerContext.cs" />
+    <Compile Include="Database\MasterDataContext.cs" />
     <Compile Include="Migrations\20190624225613_InitialCreate.cs" />
     <Compile Include="Migrations\20190624225613_InitialCreate.designer.cs">
       <DependentUpon>20190624225613_InitialCreate.cs</DependentUpon>
@@ -143,6 +143,10 @@
     <Compile Include="Migrations\20190630055140_ChangePartnerDisabledField.cs" />
     <Compile Include="Migrations\20190630055140_ChangePartnerDisabledField.designer.cs">
       <DependentUpon>20190630055140_ChangePartnerDisabledField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190713064229_ChangeContextName.cs" />
+    <Compile Include="Migrations\20190713064229_ChangeContextName.designer.cs">
+      <DependentUpon>20190713064229_ChangeContextName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\PartnerContextModelSnapshot.cs" />
     <Compile Include="Model\MasterData\Address.cs" />

@@ -8,7 +8,7 @@ using OnIndustri.Data.Database;
 
 namespace OnIndustri.Data.Migrations
 {
-    [DbContext(typeof(PartnerContext))]
+    [DbContext(typeof(MasterDataContext))]
     [Migration("20190630055140_ChangePartnerDisabledField")]
     partial class ChangePartnerDisabledField
     {

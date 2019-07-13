@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace OnIndustri.Data.Database
 {
-    public class PartnerContext : ApplicationContext
+    public class MasterDataContext : ApplicationContext
     {
-        public PartnerContext()
+        public MasterDataContext()
         {
         }
 

@@ -76,7 +76,7 @@ namespace OnIndustri.MasterData.Views
         {
             var clause = BuildSearchExpression(SearchNumber, SearchName);
             
-            using (var context = new PartnerContext())
+            using (var context = new MasterDataContext())
             {
                 var suppliers = context.Suppliers.Where(clause).OrderBy(s => s.Number).ToList();
                 SuppliersView = CollectionViewSource.GetDefaultView(suppliers);
@@ -87,7 +87,7 @@ namespace OnIndustri.MasterData.Views
         {
             var supplier = SuppliersView.CurrentItem as Supplier;
 
-            using (var context = new PartnerContext())
+            using (var context = new MasterDataContext())
             {
                 var existingSupplier = context.Suppliers.Where(s => s.Id == supplier.Id)
                     .Include(s => s.Contacts).FirstOrDefault();
@@ -133,7 +133,7 @@ namespace OnIndustri.MasterData.Views
         {
             var supplier = SuppliersView.CurrentItem as Supplier;
 
-            using (var context = new PartnerContext())
+            using (var context = new MasterDataContext())
             {
                 var existingSupplier = context.Suppliers.Where(s => s.Id == supplier.Id)
                     .Include(s => s.Contacts).FirstOrDefault();

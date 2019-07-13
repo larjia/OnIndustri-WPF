@@ -53,7 +53,7 @@ namespace OnIndustri.MasterData.Views
 
         private void Refresh()
         {
-            using (var context = new PartnerContext())
+            using (var context = new MasterDataContext())
             {
                 var supplier = context.Suppliers.Where(s => s.Id == CurrentSupplier.Id)
                     .Include(s => s.Contacts).FirstOrDefault();

@@ -130,7 +130,7 @@ namespace OnIndustri.MasterData.Views
 
         private void Save()
         {
-            using (var context = new PartnerContext())
+            using (var context = new MasterDataContext())
             {
                 if (!Validate(context)) return;
 
@@ -186,7 +186,7 @@ namespace OnIndustri.MasterData.Views
             {
                 if (r.Confirmed)
                 {
-                    using (var context = new PartnerContext())
+                    using (var context = new MasterDataContext())
                     {
                         context.Suppliers.Remove(CurrentSupplier);
                         context.SaveChanges();
@@ -205,7 +205,7 @@ namespace OnIndustri.MasterData.Views
         }
 
         // Validation
-        private bool Validate(PartnerContext context)
+        private bool Validate(MasterDataContext context)
         {
             if (string.IsNullOrWhiteSpace(CurrentSupplier.Number))
             {
