@@ -150,7 +150,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Background="Azure" Orientation="Horizontal">
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+            <Button BorderThickness="0" Command="{Binding MoveToFirstPageCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="AngleDoubleLeft" Height="12"/>
@@ -158,7 +158,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+            <Button BorderThickness="0" Command="{Binding MoveToPreviousPageCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="AngleLeft" Height="12"/>
@@ -166,7 +166,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+            <Button BorderThickness="0" Command="{Binding MoveToNextPageCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="AngleRight" Height="12"/>
@@ -174,7 +174,7 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-            <Button BorderThickness="0" Command="{Binding SaveCommand}" Height="20" Width="60" Margin="5,0,0,0">
+            <Button BorderThickness="0" Command="{Binding MoveToLastPageCommand}" Height="20" Width="60" Margin="5,0,0,0">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="AngleDoubleRight" Height="12"/>
@@ -183,11 +183,19 @@
                 </Button.Content>
             </Button>
             <TextBlock Text="第" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBlock Text="0" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding PageIndex}" VerticalAlignment="Center"/>
             <TextBlock Text="/"  VerticalAlignment="Center"/>
-            <TextBlock Text="10" VerticalAlignment="Center"/>
-            <TextBlock Text="页，每页" VerticalAlignment="Center"/>
-            <ComboBox Height="20" Margin="3,0,3,0" SelectedItem="30">
+            <TextBlock Text="{Binding TotalPages}" VerticalAlignment="Center"/>
+            <TextBlock Text="页，共" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding TotalRecords}" VerticalAlignment="Center"/>
+            <TextBlock Text="项，每页" VerticalAlignment="Center"/>
+            <ComboBox Height="20" Margin="3,0,3,0" SelectedValue="{Binding PageSize}" SelectedValuePath="Content" SelectedIndex="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <prism:InvokeCommandAction Command="{Binding PageSizeSelectionChanged}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="20"/>
                 <ComboBoxItem Content="30"/>
                 <ComboBoxItem Content="50"/>

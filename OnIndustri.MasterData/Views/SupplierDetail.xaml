@@ -136,12 +136,12 @@
             <TextBlock Grid.Row="3" Grid.Column="0" Text="地          址:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Width="390" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
                      Background="Beige" IsReadOnly="True"
-                     Text="{Binding Address, Mode=OneWay}"/>
+                     Text="{Binding CurrentSupplier.Address, Mode=OneWay}"/>
 
             <TextBlock Grid.Row="3" Grid.Column="4" Text="地          址:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="3" Grid.Column="5" Grid.ColumnSpan="4" Width="390" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"
                      Background="Beige" IsReadOnly="True"
-                     Text="{Binding Address2, Mode=OneWay}"/>
+                     Text="{Binding CurrentSupplier.Address2, Mode=OneWay}"/>
 
             <TextBlock Grid.Row="4" Grid.Column="0" Text="国          家:" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="4" Grid.Column="1" Width="150" Height="20" HorizontalAlignment="Left" Margin="5,0,0,0"

@@ -33,6 +33,9 @@ namespace OnIndustri.MasterData.Views
 
         public string SearchNumber { get; set; }
         public string SearchName { get; set; }
+        public string CurrentSearchNumber { get; private set; }
+        public string CurrentSearchName { get; private set; }
+
         //public Expression<Func<Supplier, bool>> SearchClause { get; private set; }
         //public ObservableCollection<Supplier> Suppliers { get; set; }
         private ICollectionView _suppliersView;
@@ -43,10 +46,35 @@ namespace OnIndustri.MasterData.Views
         }
 
         // Paging
-        public int PageSize { get; set; }                   // 每页记录数
-        public int PageIndex { get; set; } = 0;             // 当前页
-        public int TotalRecords { get; set; }               // 总记录数
-        public int TotalPages { get; set; }                 // 总页数
+        private int _pageSize;
+        public int PageSize                                     // 每页记录数
+        {
+            get { return _pageSize; }
+            set { SetProperty(ref _pageSize, value); }
+        }
+
+        private int _pageIndex = 0;
+        public int PageIndex                                    // 当前页
+        {
+            get { return _pageIndex; }
+            set { SetProperty(ref _pageIndex, value); }
+        }
+
+        private int _totalRecords = 0;
+        public int TotalRecords                                 // 总记录数
+        {
+            get { return _totalRecords; }
+            set { SetProperty(ref _totalRecords, value); }
+        }
+
+        private int _totalPages = 0;
+        public int TotalPages                                   // 总页数
+        {
+            get { return _totalPages; }
+            set { SetProperty(ref _totalPages, value); }
+        }
+
+        public IList<Supplier> Suppliers { get; private set; }
 
         // Notifications
         public InteractionRequest<INotification> NotificationRequest { get; set; }
@@ -57,6 +85,13 @@ namespace OnIndustri.MasterData.Views
         public DelegateCommand DetailCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
+        
+        // Commands - paging
+        public DelegateCommand MoveToFirstPageCommand { get; private set; }
+        public DelegateCommand MoveToPreviousPageCommand { get; private set; }
+        public DelegateCommand MoveToNextPageCommand { get; private set; }
+        public DelegateCommand MoveToLastPageCommand { get; private set; }
+        public DelegateCommand PageSizeSelectionChanged { get; private set; }
 
         public SupplierRetrieveViewModel()
         {
@@ -68,18 +103,101 @@ namespace OnIndustri.MasterData.Views
             DeleteCommand = new DelegateCommand(Delete, CanDelete)
                                 .ObservesProperty(() => SuppliersView);
 
+            MoveToFirstPageCommand = new DelegateCommand(MoveToFirstPage, CanMoveToFirstPage)
+                                        .ObservesProperty(() => PageIndex);
+            MoveToPreviousPageCommand = new DelegateCommand(MoveToPreviousPage, CanMoveToPreviousPage)
+                                        .ObservesProperty(() => PageIndex);
+            MoveToNextPageCommand = new DelegateCommand(MoveToNextPage, CanMoveToNextPage)
+                                        .ObservesProperty(() => PageIndex).ObservesProperty(() => TotalPages);
+            MoveToLastPageCommand = new DelegateCommand(MoveToLastPage, CanMoveToLastPage)
+                                        .ObservesProperty(() => PageIndex).ObservesProperty(() => TotalPages);
+            PageSizeSelectionChanged = new DelegateCommand(PageSizeChanged);
+
             NotificationRequest = new InteractionRequest<INotification>();
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
         
+        private void MoveToFirstPage()
+        {
+            PageIndex = 1;
+            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+        }
+
+        private bool CanMoveToFirstPage()
+        {
+            return PageIndex > 1;
+        }
+
+        private void MoveToPreviousPage()
+        {
+            PageIndex -= 1;
+            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+        }
+
+        private bool CanMoveToPreviousPage()
+        {
+            return PageIndex > 1;
+        }
+
+        private void MoveToNextPage()
+        {
+            PageIndex += 1;
+            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+        }
+
+        private bool CanMoveToNextPage()
+        {
+            return PageIndex < TotalPages;
+        }
+
+        private void MoveToLastPage()
+        {
+            PageIndex = TotalPages;
+            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+        }
+
+        private bool CanMoveToLastPage()
+        {
+            return PageIndex < TotalPages;
+        }
+
+        private void PageSizeChanged()
+        {
+            if (TotalPages == 0)
+                return;
+
+            TotalPages = (int)Math.Ceiling(1.0 * TotalRecords / PageSize);
+            PageIndex = (PageIndex > TotalPages) ? TotalPages : PageIndex;
+            SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+        }
+
         private void Search()
         {
-            var clause = BuildSearchExpression(SearchNumber, SearchName);
-            
+            CurrentSearchNumber = SearchNumber;
+            CurrentSearchName = SearchName;
+            GetData(1);
+        }
+
+        private void GetData(int pageindex)
+        {
             using (var context = new MasterDataContext())
             {
-                var suppliers = context.Suppliers.Where(clause).OrderBy(s => s.Number).ToList();
-                SuppliersView = CollectionViewSource.GetDefaultView(suppliers);
+                var clause = BuildSearchExpression(CurrentSearchNumber, CurrentSearchName);
+                var query = context.Suppliers.Where(clause).OrderBy(s => s.Number);
+
+                TotalRecords = query.Count();
+                TotalPages = (int)Math.Ceiling(1.0 * TotalRecords / PageSize);
+                PageIndex = (TotalPages == 0) ? 0 : (pageindex > TotalPages ? TotalPages : pageindex);
+                Suppliers = query.ToList();
+
+                if (PageIndex == 0)
+                {
+                    SuppliersView = CollectionViewSource.GetDefaultView(Suppliers);
+                }
+                else
+                {
+                    SuppliersView = CollectionViewSource.GetDefaultView(Suppliers.Skip((PageIndex - 1) * PageSize).Take(PageSize));
+                }
             }
         }
 
